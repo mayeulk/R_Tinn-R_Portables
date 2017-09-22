@@ -1,12 +1,12 @@
 #!/bin/bash
-# Licence de ce script: GPL v2 ou ultérieurement
+# Licence de ce script: GPL v2 ou ultérieure
 # Auteur: Mayeul KAUFFMANN
 # Pour rendre ce script exécutable, faire:
-# chmod a+x ./creer_R_Tinn-R_Portables_2009-09-01
+# chmod a+x ./creer_R_Tinn-R_Portables_2010-01-18
 # Historique:
 # 2009-02-26 Première version
 # 2009-03-25 Ajout du paquet rgrs. Suppression de "chtml ," dans la ligne où R (via wine) installe le programme de base (bug sur disque réseau). Commentaires.
-
+# 2010-01-18 Version allégée (pas les manuels, nombre réduit de paquets...)
 
 # Ce script exécutable sous GNU/Linux nécessite quelques outils, que l'on peut installer sous Debian et Ubuntu avec :
 # sudo apt-get install wget wine zip unzip
@@ -27,7 +27,7 @@ interface="SILENT"
 # interface="VERYSILENT"
 
 ### MODIFIER LA LIGNE SUIVANTE SI UNE VERSION DE R PLUS RECENTE EXISTE
-dernierR="R-2.9.2" # nom (sans extension ni "-win32") du fichier .exe téléchargeable sur http://cran.r-project.org/bin/windows/base/
+dernierR="R-3.4.1" # nom (sans extension ni "-win32") du fichier .exe téléchargeable sur http://cran.r-project.org/bin/windows/base/
 
 #mirroir="http://cran.cict.fr"
 mirroir="http://rm.mirror.garr.it/mirrors/CRAN"
@@ -40,7 +40,7 @@ mkdir --verbose --parents $pathUNIX"temp"
 mkdir --verbose --parents $pathUNIX$dernierR"TinnR-portables"
 cd $pathUNIX"temp"
 #Télécharger R pour Windows sur http://cran.r-project.org/bin/windows/base/
-#L'executable est dans notre cas: R-2.8.1-win32.exe
+#L'executable est dans notre cas: R-2.*.*-win32.exe
 
 wget $mirroir/bin/windows/base/$dernierR-win32.exe
 
@@ -49,7 +49,10 @@ pathWIN='RTinnRPortables'$aujourdhui'\'$dernierR'TinnR-portables\'$dernierR
 echo $pathWIN
 
 # installation
-wine $dernierR-win32.exe /DIR='"'$pathWIN'"' /$interface /COMPONENTS="main,  html, html/help, manuals, manuals/basic, manuals/technical, manuals/refman, tcl, Rd, trans"
+wine $dernierR-win32.exe /DIR='"'$pathWIN'"' /$interface /COMPONENTS="main, html, html/help, tcl"
+
+# wine $dernierR-win32.exe /DIR='"'$pathWIN'"' /$interface /COMPONENTS="main,  html, html/help, manuals, manuals/basic, manuals/technical, manuals/refman, tcl, Rd, trans"
+
 
 # Cette dernière ligne revient à peu près à faire à la main ce qui suit:Lancer l'executable d'installation. Choisir la langue (français), <OK>, <Suivant>, <Suivant>.Comme dossier de destination, choisir un dossier quelconque (pas nécessairement dans Program Files). Valider (<Suivant>). Choisir ensuite "Installation utilisateur" au minimum (soit 52,3Mo; si l'on n'est pas à 14Mo près en plus, prendre "Installation utilisateur complète", qui revient à cocher toutes les cases: 66,5Mo). [TODO: la correspondance entre ces options et celles de la ligne de commande ci-dessus est incertaine, cf. http://cran.r-project.org/bin/windows/base/rw-FAQ.html#Can-I-customize-the-installation_003f]. Valider (<Suivant>). A la question "Voulez-vous personnaliser les options de démarrage?" Répondre, Non, <Suivant>. Cocher <Ne pas créer de dossier dans le menu Démarrer> (sauf pour créer l'icône de lancement sur ce poste, mais celle-ci ne sert à ren pour la version portable). Valider (<Suivant>). "Tâches supplémentaires": décocher les 4 cases. <Suivant> <Terminer>.
 
@@ -65,7 +68,8 @@ mv ./Tinn-R $pathUNIX$dernierR"TinnR-portables"
 
 # Crée la commande qui sera exécutée dans R pour installer les paquets. repos=choix d'un dépot parmi http://cran.r-project.org/mirrors.html
 # TODO: vérifier qu'il ne vaudrait pas mieux définir l'option "type =" (paraît bon, cf. R-admin.pdf, section "6.3.1 Windows")
-echo 'install.packages(pkgs=c("abind", "aplpack", "Cairo", "cairoDevice", "car", "chron", "cluster", "codetools", "compositions", "date", "DBI", "Design", "effects", "foreign", "gdata", "gplots", "gtools", "Hmisc", "iplots", "its", "JavaGD", "JGR", "lattice", "latticeExtra", "lmtest", "mapdata", "mapproj", "maps", "maptools", "mgcv", "misc3d", "multcomp", "nlme", "pscl", "Rcmdr", "RcmdrPlugin.epack", "RcmdrPlugin.Export", "RcmdrPlugin.FactoMineR", "RcmdrPlugin.HH", "RcmdrPlugin.IPSUR", "RcmdrPlugin.TeachingDemos", "relimp", "rgl", "rJava", "RMySQL", "RODBC", "rpart", "RPostgreSQL", "RSQLite", "sqldf", "SQLiteDF", "survival", "TSdbi", "TSSQLite", "rgrs",         "ade4", "adehabitat", "ads", "akima", "ash", "aspace", "automap", "classInt", "clustTool", "DCluster", "diseasemapping", "ecespa", "fields", "GEOmap", "geomapdata", "geonames", "geoR", "geoRglm", "GeoXp", "glmmBUGS", "gmaps", "gmt", "grasp", "GRASS", "gstat", "hdeco", "mapdata", "mapproj", "maps", "maptools", "MBA", "ModelMap", "ncdf", "ncf", "pastecs", "PBSmapping", "PBSmodelling", "ramps", "RandomFields", "RArcInfo", "RColorBrewer", "regress", "rgdal", "RgoogleMaps", "RPyGeo", "RSAGA", "RSurvey", "sgeostat", "shapefiles", "sp", "spatclus", "spatgraphs", "spatialCovariance", "SpatialExtremes", "spatialkernel", "spatstat", "spBayes", "spdep", "spgrass6", "spgwr", "splancs", "spsurvey", "SQLiteMap", "tgp", "tossm", "trip", "tripack", "tripEstimation", "vegan", "VR"), repos="'$mirroir'", dependencies=c("Depends", "Imports"), destdir="c:/RTinnRPortables'$aujourdhui'/temp", clean=F)' > AjoutPaquets.R
+echo 'install.packages(pkgs=c("Rcmdr", "rgl", "iplots"), repos="'$mirroir'", dependencies=c("Depends", "Imports"), destdir="c:/RTinnRPortables'$aujourdhui'/temp", clean=F)' > AjoutPaquets.R
+# Note: It is possible to automatically install all the packages of a given view thanks to the ctv package, cf. http://cran.r-project.org/web/views/
 # Optionnel: écrire c("Depends", "Imports","Suggests") au lieu de c("Depends", "Imports")   ce qui rajouterait de nombreux paquets:  total d'environ 300 Mo au lieu de 150Mo.
 
 # Exécute AjoutPaquets.R dans R.

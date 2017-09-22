@@ -2,7 +2,7 @@
 # Licence de ce script: GPL v2 ou ultérieurement
 # Auteur: Mayeul KAUFFMANN
 # Pour rendre ce script exécutable, faire:
-# chmod a+x ./creer_R_Tinn-R_Portables_2009-03-25
+# chmod a+x ./creer_R_Tinn-R_Portables_2009-09-01
 # Historique:
 # 2009-02-26 Première version
 # 2009-03-25 Ajout du paquet rgrs. Suppression de "chtml ," dans la ligne où R (via wine) installe le programme de base (bug sur disque réseau). Commentaires.
@@ -27,9 +27,10 @@ interface="SILENT"
 # interface="VERYSILENT"
 
 ### MODIFIER LA LIGNE SUIVANTE SI UNE VERSION DE R PLUS RECENTE EXISTE
-dernierR="R-2.8.1" # nom (sans extension ni "-win32") du fichier .exe téléchargeable sur http://cran.r-project.org/bin/windows/base/
+dernierR="R-2.9.2" # nom (sans extension ni "-win32") du fichier .exe téléchargeable sur http://cran.r-project.org/bin/windows/base/
 
-mirroir="http://cran.cict.fr"
+#mirroir="http://cran.cict.fr"
+mirroir="http://rm.mirror.garr.it/mirrors/CRAN"
 
 aujourdhui=`date +%Y-%m-%d`
 pathUNIX='/home/'$USER'/.wine/drive_c/RTinnRPortables'$aujourdhui'/'
@@ -64,7 +65,7 @@ mv ./Tinn-R $pathUNIX$dernierR"TinnR-portables"
 
 # Crée la commande qui sera exécutée dans R pour installer les paquets. repos=choix d'un dépot parmi http://cran.r-project.org/mirrors.html
 # TODO: vérifier qu'il ne vaudrait pas mieux définir l'option "type =" (paraît bon, cf. R-admin.pdf, section "6.3.1 Windows")
-echo 'install.packages(pkgs=c("abind", "aplpack", "Cairo", "cairoDevice", "car", "chron", "cluster", "codetools", "compositions", "date", "DBI", "Design", "effects", "foreign", "gdata", "gplots", "gtools", "Hmisc", "iplots", "its", "JavaGD", "JGR", "lattice", "latticeExtra", "lmtest", "mapdata", "mapproj", "maps", "maptools", "mgcv", "misc3d", "multcomp", "nlme", "pscl", "Rcmdr", "RcmdrPlugin.epack", "RcmdrPlugin.Export", "RcmdrPlugin.FactoMineR", "RcmdrPlugin.HH", "RcmdrPlugin.IPSUR", "RcmdrPlugin.TeachingDemos", "relimp", "rgl", "rJava", "RMySQL", "RODBC", "rpart", "RPostgreSQL", "RSQLite", "sqldf", "SQLiteDF", "survival", "TSdbi", "TSSQLite", "rgrs"), repos="'$mirroir'", dependencies=c("Depends", "Imports"), destdir="c:/RTinnRPortables'$aujourdhui'/temp", clean=F)' > AjoutPaquets.R
+echo 'install.packages(pkgs=c("abind", "aplpack", "Cairo", "cairoDevice", "car", "chron", "cluster", "codetools", "compositions", "date", "DBI", "Design", "effects", "foreign", "gdata", "gplots", "gtools", "Hmisc", "iplots", "its", "JavaGD", "JGR", "lattice", "latticeExtra", "lmtest", "mapdata", "mapproj", "maps", "maptools", "mgcv", "misc3d", "multcomp", "nlme", "pscl", "Rcmdr", "RcmdrPlugin.epack", "RcmdrPlugin.Export", "RcmdrPlugin.FactoMineR", "RcmdrPlugin.HH", "RcmdrPlugin.IPSUR", "RcmdrPlugin.TeachingDemos", "relimp", "rgl", "rJava", "RMySQL", "RODBC", "rpart", "RPostgreSQL", "RSQLite", "sqldf", "SQLiteDF", "survival", "TSdbi", "TSSQLite", "rgrs",         "ade4", "adehabitat", "ads", "akima", "ash", "aspace", "automap", "classInt", "clustTool", "DCluster", "diseasemapping", "ecespa", "fields", "GEOmap", "geomapdata", "geonames", "geoR", "geoRglm", "GeoXp", "glmmBUGS", "gmaps", "gmt", "grasp", "GRASS", "gstat", "hdeco", "mapdata", "mapproj", "maps", "maptools", "MBA", "ModelMap", "ncdf", "ncf", "pastecs", "PBSmapping", "PBSmodelling", "ramps", "RandomFields", "RArcInfo", "RColorBrewer", "regress", "rgdal", "RgoogleMaps", "RPyGeo", "RSAGA", "RSurvey", "sgeostat", "shapefiles", "sp", "spatclus", "spatgraphs", "spatialCovariance", "SpatialExtremes", "spatialkernel", "spatstat", "spBayes", "spdep", "spgrass6", "spgwr", "splancs", "spsurvey", "SQLiteMap", "tgp", "tossm", "trip", "tripack", "tripEstimation", "vegan", "VR"), repos="'$mirroir'", dependencies=c("Depends", "Imports"), destdir="c:/RTinnRPortables'$aujourdhui'/temp", clean=F)' > AjoutPaquets.R
 # Optionnel: écrire c("Depends", "Imports","Suggests") au lieu de c("Depends", "Imports")   ce qui rajouterait de nombreux paquets:  total d'environ 300 Mo au lieu de 150Mo.
 
 # Exécute AjoutPaquets.R dans R.
